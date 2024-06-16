@@ -67,3 +67,31 @@ jobs:
         uses: softprops/action-gh-release@v1
         with:
           files: opus.linux.${{ github.ref_name }}.tar.gz
+  macOS:
+    permissions:
+      contents: write
+    runs-on: macos-14
+    steps:
+      - name: Checkout opus
+        uses: actions/checkout@v4
+        with:
+          repository: xiph/opus
+          ref: v1.4
+          path: opus
+      - name: Build
+        run: |
+          cd opus
+          mkdir build
+          cd build
+          cmake .. -B Release -DCMAKE_BUILD_TYPE=Release
+          cmake --build Release
+          cmake --install Release/ --prefix install/Release
+      - name: Generate tar
+        run: |
+          echo ${{ github.sha }} > Release.txt
+          cp Release.txt ./opus/build/install/Release
+          tar -czvf opus.macos.${{ github.ref_name }}.tar.gz -C ./opus/build/install/Release .
+      - name: Release
+        uses: softprops/action-gh-release@v1
+        with:
+          files: opus.macos.${{ github.ref_name }}.tar.gz
