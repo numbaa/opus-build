@@ -90,8 +90,8 @@ jobs:
         run: |
           echo ${{ github.sha }} > Release.txt
           cp Release.txt ./opus/build/install/Release
-          tar -czvf opus.macos.${{ github.ref_name }}.tar.gz -C ./opus/build/install/Release .
+          tar -czvf opus.mac.${{ github.ref_name }}.tar.gz -C ./opus/build/install/Release .
       - name: Release
         uses: softprops/action-gh-release@v1
         with:
-          files: opus.macos.${{ github.ref_name }}.tar.gz
+          files: opus.mac.${{ github.ref_name }}.tar.gz
